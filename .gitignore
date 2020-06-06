@@ -1,0 +1,11 @@
+######### Unreal Ignored Files #########
+Build
+Binaries
+DerivedDataCache
+Intermediate
+Saved
+Content/StarterContent
+.vs
+
+######### VS Ignored Files #########
+*.VC.db
