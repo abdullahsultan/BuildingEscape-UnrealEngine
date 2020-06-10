@@ -31,7 +31,6 @@ public:
 	float CloseYaw;
 
 private:
-	UPROPERTY(EditAnywhere)
 	AActor* Player;
 	UPROPERTY(EditAnywhere)
 	ATriggerVolume* PressurePlate;
