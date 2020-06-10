@@ -3,8 +3,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Engine/TriggerVolume.h"
 #include "Components/ActorComponent.h"
-#include "DoorRotation.generated.h"
+#include "DoorRotation.generated.h" //Always Kepp this file at end
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
@@ -23,7 +24,16 @@ protected:
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+	void DoorOpen(float DeltaTime);
+	void DoorClose(float DeltaTime);
 	float StartingYaw;
-	float TargetYaw;
+	float OpenYaw;
+	float CloseYaw;
+
+private:
+	UPROPERTY(EditAnywhere)
+	AActor* Player;
+	UPROPERTY(EditAnywhere)
+	ATriggerVolume* PressurePlate;
 		
 };

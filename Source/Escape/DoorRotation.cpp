@@ -21,8 +21,9 @@ void UDoorRotation::BeginPlay()
 	Super::BeginPlay();
 
 	// ...
-	StartingYaw = GetOwner()->GetActorRotation().Yaw;
-	TargetYaw = GetOwner()->GetActorRotation().Yaw + 90.0f;
+	CloseYaw = GetOwner()->GetActorRotation().Yaw;
+	OpenYaw = GetOwner()->GetActorRotation().Yaw + 90.0f;
+	Player = GetWorld()->GetFirstPlayerController()->GetPawn();
 	
 }
 
@@ -33,9 +34,29 @@ void UDoorRotation::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	// ...
+	if (PressurePlate->IsOverlappingActor(Player))
+	{
+		DoorOpen(DeltaTime);
+	}
+	else
+	{
+		DoorClose(DeltaTime);
+	}
+}
+
+void UDoorRotation::DoorOpen(float DeltaTime)
+{
 	StartingYaw = GetOwner()->GetActorRotation().Yaw;
 	FRotator Rotator = FRotator(0.0f, StartingYaw, 0.0f);
-	Rotator.Yaw = FMath::Lerp(StartingYaw, TargetYaw, 0.85f * DeltaTime);
+	Rotator.Yaw = FMath::Lerp(StartingYaw, OpenYaw, 0.85f * DeltaTime);
+	GetOwner()->SetActorRotation(Rotator);
+}
+
+void UDoorRotation::DoorClose(float DeltaTime)
+{
+	StartingYaw = GetOwner()->GetActorRotation().Yaw;
+	FRotator Rotator = FRotator(0.0f, StartingYaw, 0.0f);
+	Rotator.Yaw = FMath::Lerp(StartingYaw, CloseYaw, 0.85f * DeltaTime);
 	GetOwner()->SetActorRotation(Rotator);
 }
 
