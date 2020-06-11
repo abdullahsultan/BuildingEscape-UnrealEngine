@@ -21,25 +21,11 @@ void UGrabber::BeginPlay()
 	Super::BeginPlay();
 
 	// ...
-	PhysicsHandle = GetOwner()->FindComponentByClass<UPhysicsHandleComponent>();
-	if (PhysicsHandle)
-	{
-		//
-	}
-	else
-	{
-		UE_LOG(LogTemp, Error, TEXT("Physics Hndler not found."));
-	}
-	Input = GetOwner()->FindComponentByClass<UInputComponent>();
-	if (Input)
-	{
-		Input->BindAction("Grab", IE_Pressed, this, UGrabber::Grab);
-	}
-	else
-	{
-		UE_LOG(LogTemp, Error, TEXT("Input Controller not found."));
-	}
+	GetPhysicsHandle();
+	OnKeyPressORRelease();
 }
+
+
 
 
 // Called every frame
@@ -48,14 +34,17 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	// ...
+	GetPhysicsBodyInReach();
+}
+
+
+FHitResult UGrabber::GetPhysicsBodyInReach()
+{
 	FVector PlayerViewPointLocation;
 	FRotator PlayerViewPointRotation;
 	GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(PlayerViewPointLocation, PlayerViewPointRotation);
-	//UE_LOG(LogTemp, Warning, TEXT("Location =%s	.... Rotation = %s"), *PlayerViewPointLocation.ToString(), *PlayerViewPointRotation.Vector().ToString());
 
 	FVector LineEnd = PlayerViewPointLocation + PlayerViewPointRotation.Vector() * 100.0f;
-		FVector(0.0f, 0.0f, 50.0f);
-	DrawDebugLine(GetWorld(),PlayerViewPointLocation, LineEnd, FColor(0,255,0), false, 0.0f, 0.0f, 10.0f);
 
 	FHitResult Hit = FHitResult();
 	FCollisionQueryParams TraceParameters(FName(TEXT("")), false, GetOwner());
@@ -67,10 +56,47 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 		TraceParameters
 	);
 
-	
+
 	if (Hit.GetActor())
 	{
 		UE_LOG(LogTemp, Warning, TEXT("%s"), *Hit.GetActor()->GetName());
 	}
+
+	return Hit;
+}
+
+void UGrabber::GetPhysicsHandle()
+{
+	PhysicsHandle = GetOwner()->FindComponentByClass<UPhysicsHandleComponent>();
+	if (PhysicsHandle)
+	{
+		//
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("Physics Hndler not found."));
+	}
+}
+
+void UGrabber::OnKeyPressORRelease()
+{
+	Input = GetOwner()->FindComponentByClass<UInputComponent>();
+	if (Input)
+	{
+		Input->BindAction("Grab", IE_Pressed, this, &UGrabber::Grab);
+		Input->BindAction("Grab", IE_Released, this, &UGrabber::Release);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("Input Controller not found."));
+	}
+}
+
+void UGrabber::Grab() {
+	UE_LOG(LogTemp, Warning, TEXT("Input Is Working"));
+}
+
+void UGrabber::Release() {
+	UE_LOG(LogTemp, Warning, TEXT("Key Released"));
 }
 

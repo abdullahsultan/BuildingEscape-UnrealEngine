@@ -21,11 +21,17 @@ public:
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
-
+	
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+	FHitResult GetPhysicsBodyInReach();
 	void Grab();
+	void Release();
+	void GetPhysicsHandle();
+	void OnKeyPressORRelease();
+
+
 
 private:
 	UPhysicsHandleComponent* PhysicsHandle = nullptr;
