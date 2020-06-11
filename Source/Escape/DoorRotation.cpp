@@ -34,6 +34,7 @@ void UDoorRotation::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	// ...
+	//UE_LOG(LogTemp, Warning, TEXT("%s"), *GetOwner()->GetName());
 	if (PressurePlate->IsOverlappingActor(Player))
 	{
 		DoorOpen(DeltaTime);
