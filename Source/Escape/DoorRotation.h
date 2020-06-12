@@ -26,6 +26,7 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 	void DoorOpen(float DeltaTime);
 	void DoorClose(float DeltaTime);
+	float GetTotalMassOnPressurePlate();
 	float StartingYaw;
 	float OpenYaw;
 	float CloseYaw;

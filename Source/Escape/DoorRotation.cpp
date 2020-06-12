@@ -35,7 +35,7 @@ void UDoorRotation::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 
 	// ...
 	//UE_LOG(LogTemp, Warning, TEXT("%s"), *GetOwner()->GetName());
-	if (PressurePlate->IsOverlappingActor(Player))
+	if (GetTotalMassOnPressurePlate() >= 40.0f)
 	{
 		DoorOpen(DeltaTime);
 	}
@@ -59,5 +59,18 @@ void UDoorRotation::DoorClose(float DeltaTime)
 	FRotator Rotator = FRotator(0.0f, StartingYaw, 0.0f);
 	Rotator.Yaw = FMath::Lerp(StartingYaw, CloseYaw, 0.85f * DeltaTime);
 	GetOwner()->SetActorRotation(Rotator);
+}
+
+float UDoorRotation::GetTotalMassOnPressurePlate()
+{
+	TArray<AActor*> ActorsOnPressurePlate;
+	PressurePlate->GetOverlappingActors(ActorsOnPressurePlate);
+	float TotalMass= 0.0f;
+	//AActor* Actor;
+	for(AActor* Actor: ActorsOnPressurePlate)
+	{
+		TotalMass += Actor->FindComponentByClass<UPrimitiveComponent>()->GetMass();
+	}
+	return TotalMass;
 }
 
