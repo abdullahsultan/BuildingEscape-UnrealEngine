@@ -26,6 +26,8 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 	FHitResult GetPhysicsBodyInReach();
+	FVector GetLineEnd();
+	FVector GetLineStart();
 	void Grab();
 	void Release();
 	void GetPhysicsComponent();
