@@ -28,7 +28,7 @@ public:
 	FHitResult GetPhysicsBodyInReach();
 	void Grab();
 	void Release();
-	void GetPhysicsHandle();
+	void GetPhysicsComponent();
 	void OnKeyPressORRelease();
 
 

@@ -21,7 +21,7 @@ void UGrabber::BeginPlay()
 	Super::BeginPlay();
 
 	// ...
-	GetPhysicsHandle();
+	GetPhysicsComponent();
 	OnKeyPressORRelease();
 }
 
@@ -34,7 +34,15 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	// ...
-	GetPhysicsBodyInReach();
+	FVector PlayerViewPointLocation;
+	FRotator PlayerViewPointRotation;
+	GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(PlayerViewPointLocation, PlayerViewPointRotation);
+
+	FVector LineEnd = PlayerViewPointLocation + PlayerViewPointRotation.Vector() * 100.0f;
+	if (PhysicsHandle->GetGrabbedComponent())
+	{
+		PhysicsHandle->SetTargetLocation(LineEnd);
+	}
 }
 
 
@@ -65,7 +73,7 @@ FHitResult UGrabber::GetPhysicsBodyInReach()
 	return Hit;
 }
 
-void UGrabber::GetPhysicsHandle()
+void UGrabber::GetPhysicsComponent()
 {
 	PhysicsHandle = GetOwner()->FindComponentByClass<UPhysicsHandleComponent>();
 	if (PhysicsHandle)
@@ -74,7 +82,7 @@ void UGrabber::GetPhysicsHandle()
 	}
 	else
 	{
-		UE_LOG(LogTemp, Error, TEXT("Physics Hndler not found."));
+		UE_LOG(LogTemp, Error, TEXT("Physics Component not found."));
 	}
 }
 
@@ -94,9 +102,25 @@ void UGrabber::OnKeyPressORRelease()
 
 void UGrabber::Grab() {
 	UE_LOG(LogTemp, Warning, TEXT("Input Is Working"));
+	UPrimitiveComponent* ComponentToGrab = GetPhysicsBodyInReach().GetComponent();
+	AActor* ActorHit = GetPhysicsBodyInReach().GetActor();
+	if (ActorHit != nullptr)
+	{
+		PhysicsHandle->GrabComponent(
+			ComponentToGrab,
+			NAME_None,
+			ComponentToGrab->GetOwner()->GetActorLocation(),
+			true
+		);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("NULLLLLLLLLLLLL"));
+	}
 }
 
 void UGrabber::Release() {
 	UE_LOG(LogTemp, Warning, TEXT("Key Released"));
+	PhysicsHandle->ReleaseComponent();
 }
 
