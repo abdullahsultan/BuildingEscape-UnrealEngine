@@ -71,6 +71,7 @@ float UDoorRotation::GetTotalMassOnPressurePlate()
 	//AActor* Actor;
 	for(AActor* Actor: ActorsOnPressurePlate)
 	{
+		UE_LOG(LogTemp, Error, TEXT("%s"), *Actor->GetName());
 		TotalMass += Actor->FindComponentByClass<UPrimitiveComponent>()->GetMass();
 	}
 	return TotalMass;
