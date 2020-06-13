@@ -35,5 +35,5 @@ private:
 	AActor* Player;
 	UPROPERTY(EditAnywhere)
 	ATriggerVolume* PressurePlate;
-		
+	
 };

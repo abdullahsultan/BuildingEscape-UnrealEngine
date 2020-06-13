@@ -2,6 +2,8 @@
 
 
 #include "DoorRotation.h"
+#include "Sound/AmbientSound.h"
+#include "Kismet/GameplayStatics.h"
 #include "GameFramework/Actor.h"
 
 // Sets default values for this component's properties
